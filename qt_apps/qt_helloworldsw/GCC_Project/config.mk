@@ -67,32 +67,32 @@ ifeq ($(BUILD_SYS),WINCMD)
 ################
 $(info Building on Windows $(BUILD_SYS))
 
-export DIR_SEP=\\
+export DIR_SEP=/
 
 
 #Configuration options for GNU Win32 GCC Toolchain
 export MKDIR=mkdir
-export RM=del /S /Q
+export RM=rm -f
 export LS=dir
-export CP=copy
-export MV=move
+export CP=cp
+export MV=mv
 export ECHO=echo
 #export PROJ_DIR=$(shell $(ECHO) %cd%)
 # GNU make - abspath results in forward slashes
 _tmp=$(abspath .)
 # We require DOS style slashes, convert
-_tmp2=$(subst /,\,${_tmp})
+_tmp2=$(subst /,/,${_tmp})
 # Resolve this once, now, thus we assign with := not =
 export PROJ_DIR := ${_tmp2}
 
 $(info PROJ_DIR = ${PROJ_DIR})
-export PROJ_ROOT=$(PROJ_DIR)\..\..\..
+export PROJ_ROOT=$(PROJ_DIR)/../../..
 export OUTPUT_PATH=output
-export DEPEND_PATH=output\depend
-#COMPILER_LIBS_PATH=C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.4\arm\CMSIS\Lib\IAR
+export DEPEND_PATH=output/depend
+#COMPILER_LIBS_PATH=C:/Program Files (x86)/IAR Systems/Embedded Workbench 7.4/arm/CMSIS/Lib/IAR
 
-export APP_DIR = $(subst \GCC_Project,,${PROJ_DIR})
-TMPVAR = $(subst \, ,${APP_DIR})
+export APP_DIR = $(subst /GCC_Project,,${PROJ_DIR})
+TMPVAR = $(subst /, ,${APP_DIR})
 PROJ_NAME=$(word $(words ${TMPVAR}),${TMPVAR})
 export PROJ_NAME
 
@@ -100,7 +100,7 @@ ifndef QORC_TC_PATH
 FIND_TOOL_DIR := $(shell where arm-none-eabi-gcc)
 ifndef FIND_TOOL_DIR
 $(info using recursive search)
-FIND_TOOL_DIR := $(shell where /r c:\progra~2 arm-none-eabi-gcc)
+FIND_TOOL_DIR := $(shell where /r c:/progra~2 arm-none-eabi-gcc)
 endif
 endif #QORC_TC_PATH
 
@@ -109,17 +109,17 @@ export QORC_TC_PATH = $(subst \arm-none-eabi-gcc.exe,,$(FIND_TOOL_DIR))
 endif
 
 #Override with your own tool direcoty
-#export QORC_TC_PATH=C:\Program Files (x86)\GNU Tools ARM Embedded\7 2017-q4-major\bin
+#export QORC_TC_PATH=C:/Program Files (x86)/GNU Tools ARM Embedded/7 2017-q4-major/bin
 ifndef QORC_TC_PATH
 $(info ######  ERROR - QORC_TC_PATH is not defined in config.mk #########)
 exit
 endif
 
-export NM="$(QORC_TC_PATH)\arm-none-eabi-nm"
-export LD="$(QORC_TC_PATH)\arm-none-eabi-gcc"
-export AS="$(QORC_TC_PATH)\arm-none-eabi-gcc" -c
-export CC="$(QORC_TC_PATH)\arm-none-eabi-gcc" -c
-export ELF2BIN="$(QORC_TC_PATH)\arm-none-eabi-objcopy"
+export NM="$(QORC_TC_PATH)/arm-none-eabi-nm"
+export LD="$(QORC_TC_PATH)/arm-none-eabi-gcc"
+export AS="$(QORC_TC_PATH)/arm-none-eabi-gcc" -c
+export CC="$(QORC_TC_PATH)/arm-none-eabi-gcc" -c
+export ELF2BIN="$(QORC_TC_PATH)/arm-none-eabi-objcopy"
 ################
 else
 ################ Linux ###################
