@@ -18,10 +18,10 @@
  *
  *    File   : main.c
  *    Purpose: main for Thing Plus helloworldsw and LED/UserButton test
- *                                                          
+ *
  *=========================================================*/
 
-#include "Fw_global_config.h"   // This defines application specific charactersitics
+#include "Fw_global_config.h" // This defines application specific charactersitics
 
 #include <stdio.h>
 #include "FreeRTOS.h"
@@ -42,19 +42,16 @@
 
 #include "cli.h"
 
-#include "fpga_loader.h"    // API for loading FPGA
-#include "gateware.h"           // FPGA bitstream to load into FPGA
+#include "fpga_loader.h" // API for loading FPGA
+#include "gateware.h"    // FPGA bitstream to load into FPGA
 
 extern const struct cli_cmd_entry my_main_menu[];
 
-
 const char *SOFTWARE_VERSION_STR;
-
 
 /*
  * Global variable definition
  */
-
 
 extern void qf_hardwareSetup();
 static void nvic_init(void);
@@ -63,40 +60,42 @@ int main(void)
 {
 
     SOFTWARE_VERSION_STR = "qorc-sdk/qt_apps/qt_helloworldsw";
-    
+
     qf_hardwareSetup();
     nvic_init();
     S3x_Clk_Disable(S3X_FB_21_CLK);
     S3x_Clk_Disable(S3X_FB_16_CLK);
     S3x_Clk_Enable(S3X_A1_CLK);
     S3x_Clk_Enable(S3X_CFG_DMA_A1_CLK);
-    load_fpga(axFPGABitStream_length,axFPGABitStream);
+    load_fpga(axFPGABitStream_length, axFPGABitStream);
     // Use 0x6141 as USB serial product ID (USB PID)
-    HAL_usbserial_init2(false, false, 0x6141);        // Start USB serial not using interrupts
-    for (int i = 0; i != 4000000; i++) ;   // Give it time to enumerate
-    
-    dbg_str("\n\n");
-    dbg_str( "##########################\n");
-    dbg_str( "Sparkfun Thing+ LED / User Button Test\n");
-    dbg_str( "SW Version: ");
-    dbg_str( SOFTWARE_VERSION_STR );
-    dbg_str( "\n" );
-    dbg_str( __DATE__ " " __TIME__ "\n" );
-    dbg_str( "##########################\n\n");
-	
-	dbg_str( "\n\nHello world!!\n\n");	// <<<<<<<<<<<<<<<<<<<<<  Change me!
+    HAL_usbserial_init2(false, false, 0x6141); // Start USB serial not using interrupts
+    for (int i = 0; i != 4000000; i++)
+        ; // Give it time to enumerate
 
-    CLI_start_task( my_main_menu );
-        
+    dbg_str("\n\n");
+    dbg_str("##########################\n");
+    dbg_str("Sparkfun Thing+ LED / User Button Test\n");
+    dbg_str("SW Version: ");
+    dbg_str(SOFTWARE_VERSION_STR);
+    dbg_str("\n");
+    dbg_str(__DATE__ " " __TIME__ "\n");
+    dbg_str("##########################\n\n");
+
+    dbg_str("\n\nHello world!! My name is Johnny Appleseed\n\n"); // <<<<<<<<<<<<<<<<<<<<<  Change me!
+
+    CLI_start_task(my_main_menu);
+
     /* Start the tasks and timer running. */
     vTaskStartScheduler();
     dbg_str("\n");
-      
-    while(1);
+
+    while (1)
+        ;
 }
 
 static void nvic_init(void)
- {
+{
     // To initialize system, this interrupt should be triggered at main.
     // So, we will set its priority just before calling vTaskStartScheduler(), not the time of enabling each irq.
     NVIC_SetPriority(Ffe0_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY);
@@ -104,12 +103,9 @@ static void nvic_init(void)
     NVIC_SetPriority(CfgDma_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY);
     NVIC_SetPriority(Uart_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY);
     NVIC_SetPriority(FbMsg_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY);
- }    
-
-//needed for startup_EOSS3b.s asm file
-void SystemInit(void)
-{
-
 }
 
-
+// needed for startup_EOSS3b.s asm file
+void SystemInit(void)
+{
+}

@@ -72,7 +72,6 @@ export DIR_SEP=/
 
 #Configuration options for GNU Win32 GCC Toolchain
 export MKDIR=mkdir
-export RM=rm -f
 export LS=dir
 export CP=cp
 export MV=mv
